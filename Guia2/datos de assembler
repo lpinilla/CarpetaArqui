@@ -1,0 +1,13 @@
+datos: 
+
+no se puede pushear cosas de 8 bits, solo 16 o 32
+
+no se pueden sumar registros de distintos tamaños
+
+tener cuidado en cuando se referencia a la posicion de memoria y cuando a lo que apunta
+
+una dirección de memoria ocupa si o si 32 bytes (en sistema de 32 bytes) entonces necesito registros de 4 bytes, eax, bax, eip, esi (todos los que empiezan con e)
+
+si quiero sumar un registro de 8 bits con uno de 32, sumo el de 32 que le correspondería al de 8. ejemplo: sumar ebx con cl sería ebx + ecx
+
+add y sub se manejan con los registros o posiciones de memoria

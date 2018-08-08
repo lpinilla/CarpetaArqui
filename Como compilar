@@ -1,0 +1,6 @@
+compilar:
+
+nasm -f elf64 archivo.asm -o archivo.o
+
+linkeditar:
+gcc archivo.o -o archivo
