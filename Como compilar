@@ -2,5 +2,15 @@ compilar:
 
 nasm -f elf64 archivo.asm -o archivo.o
 
+
 linkeditar:
 gcc archivo.o -o archivo
+
+
+32 bits:
+
+nasm -f elf32 nombre.asm
+
+linkditar varios archivos:
+ld -melf_i386 -o nombre archivo1.o archivo2.o ...
+

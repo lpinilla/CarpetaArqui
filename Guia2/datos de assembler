@@ -11,3 +11,5 @@ una dirección de memoria ocupa si o si 32 bytes (en sistema de 32 bytes) entonc
 si quiero sumar un registro de 8 bits con uno de 32, sumo el de 32 que le correspondería al de 8. ejemplo: sumar ebx con cl sería ebx + ecx
 
 add y sub se manejan con los registros o posiciones de memoria
+
+para compilar 32 bits: nasm -f elf
