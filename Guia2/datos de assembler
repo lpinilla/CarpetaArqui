@@ -13,3 +13,7 @@ si quiero sumar un registro de 8 bits con uno de 32, sumo el de 32 que le corres
 add y sub se manejan con los registros o posiciones de memoria
 
 para compilar 32 bits: nasm -f elf
+
+dividir 1/10 da aritmetic exception si se usan registros de 8 bits (tal vez 0,.... no entra en el registro)
+
+hay que tener en cuenta como se suman los registros de 16 con los de 8, no es lo mismo sumar ebx con al o con ah, la posicion importa

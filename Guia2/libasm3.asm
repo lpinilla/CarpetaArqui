@@ -82,48 +82,63 @@ ejer3:
 	mov ecx, 0 			;limpiar el registro para usarlo como 2 de 8
 
 	.ciclo:	
-	cmp eax, 0
-	jz writeinmemory	;condicion de corte del ciclo
-	div dl 				;asumo que guarda el resto de dividir eax con dl en ah
+	cmp al, 0
+	jz .writeinmemory	;por si se inserta el 0
+
+	cmp al, dl 			;condicion de corte del ciclo, el numero es menor a 10
+	jb .finaldigit 		
+
+						;el numero es mayor o igual a 10
+	div dl 				;guarda el resto de dividir al con dl en ah
 	add ah, dh 			;convertir el numero
 	mov ch, ah	
 	push ecx
 	inc cl
-	jmp ciclo
+	jmp .ciclo
+
+	.finaldigit:
+	add al, dh
+	mov ch, al
+	push ecx
+	inc cl
 
 	.writeinmemory:
 	cmp cl, 0 			;si se ingresó el 0, que vaya al exit
-	jz end
+	jz .end
 						;desde aca se asume que hay un numero
 	push ebx
 	mov ch, 0
 	add ebx, ecx 		;sumamos ebx con cl para mover el puntero
-	mov [ebx], 0		;'0' terminated
-	mov [ebx+1], 10h 	; insertar '\n'
+	mov dl, 0Ah
+	mov [ebx], dl 		; insertar '\n'
+	mov dl, 0h
+	mov [ebx+1], dl		;'0' terminated	
 	pop ebx 			;recuperamos el valor original de la direccion
-	mov dl, cl 			;guardamos la cantidad total
+	mov dl, cl 			;guardamos la cantidad total para la iteracion
+	mov dh, dl 			;guardamos la cantidad total para la subtracción de indices
 
 
 	.loop:
 	cmp dl, 0
-	jz end
+	jz .end
 
 	pop ecx				;agarramos la letra y su posición
 	push edx			;guardamos el indice del loop
-	dec dl 				;tiene que arrancar de 0
-	sub dl, cl 			;averiguamos en que indice esta la letra
+	dec dh 				;restar porque indices arrancan en 0
+	sub dh, cl 			;averiguamos en que indice esta la letra
 
-	mov dh,0			;es para pushear ebx
+	mov dl, dh
+	mov dh,0			;es para sumar con ebx
 	push ebx
 
 	add ebx, edx		;movemos el puntero
 	mov [ebx], ch 		;guardamos la letra
 
 	pop ebx
-	pop edx 			;recuperamos dl
+	pop edx 			;recuperamos dl y dh
 
 	dec dl
-	jmp loop
+	jmp .loop
 
 	.end:
 	pop eax

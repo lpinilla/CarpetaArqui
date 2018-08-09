@@ -7,7 +7,8 @@ EXTERN exit
 
 
 _start:
-	mov al, 3
+	mov eax, 0x 	;clear ax register
+	mov al, 14
 	mov ebx, space
 	call ejer3 
 	call print
@@ -17,7 +18,7 @@ _start:
 
 
 section .data
-	space db 'a', 0, 10
+	space db 'ab', 10, 0
 
 section .bss
 	placeholder resb 20
