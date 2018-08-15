@@ -8,7 +8,7 @@ EXTERN exit
 
 _start:
 	mov eax, 0x 	;clear ax register
-	mov al, 14
+	mov al, 0
 	mov ebx, space
 	call ejer3 
 	call print

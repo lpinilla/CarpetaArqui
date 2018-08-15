@@ -7,6 +7,8 @@ EXTERN exit
 
 _start:
 
+	;no tiene stack frame
+
 	pushf							;guardamos los flags que tenía
 	pusha
 	mov eax, 0 						;limpiamos el registro a
@@ -14,34 +16,42 @@ _start:
 	mov ah, 10						;k
 	mov ecx, 0						;limpiar el registro c
 	mov ebx, numberholder
+	inc ah 							;hardcodeo para no tener en cuenta n=k
 
-	.loop:							;loop infinito
+	.loop:							
 	cmp cl, ah
 	je .end
+									;swappear los registros para dividir
 	push eax
-	mov ch, al 						;swap cl con al
-	mov al, cl
-	mov cl, ch
-	mov ch, ah
-	mov ah, 0
+	mov eax, ecx
+	pop ecx
+
+	push eax						;guardar el numero por si es multiplo
 	div cl
 	cmp ah, 0
 	je .writenumber					;condicion: si el resto da 0
-	pop eax
+									;volver a swappear los registros luego de dividir
+	push eax
+	mov eax, ecx
+	pop ecx
+
+	pop ecx							;restaurar el numero
 	inc cl
 	jmp .loop
 
 
 	.writenumber:
-	push eax
-	mov eax, ecx					;pasamos el valor a imprimir
 	call ejer3
-	pop eax	
 	jmp .printnumber
 
 	.printnumber:
 	call print
-	pop eax 						;como se sale del ciclo, tiene que volver
+
+	push eax						;swappear y volver al ciclo
+	mov eax, ecx
+	pop ecx
+
+	pop ecx
 	inc cl 							;y hacer lo que se hace si no se entra al ciclo
 	jmp .loop
 

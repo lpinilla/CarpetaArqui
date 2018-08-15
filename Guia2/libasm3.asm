@@ -76,15 +76,13 @@ strlen:
 ;-----------------------------------------------------------
 ejer3:
 	pushf				;guardar los flags
+	pusha
 	push eax			;guardar el numero original
 	mov dl, 10	
 	mov dh, 30h			;la diferencia entre valor y representación de numero	
 	mov ecx, 0 			;limpiar el registro para usarlo como 2 de 8
 
 	.ciclo:	
-	cmp al, 0
-	jz .writeinmemory	;por si se inserta el 0
-
 	cmp al, dl 			;condicion de corte del ciclo, el numero es menor a 10
 	jb .finaldigit 		
 
@@ -103,8 +101,6 @@ ejer3:
 	inc cl
 
 	.writeinmemory:
-	cmp cl, 0 			;si se ingresó el 0, que vaya al exit
-	jz .end
 						;desde aca se asume que hay un numero
 	push ebx
 	mov ch, 0
@@ -142,5 +138,6 @@ ejer3:
 
 	.end:
 	pop eax
+	popa
 	popf
 	ret
