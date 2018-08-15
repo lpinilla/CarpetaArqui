@@ -1,6 +1,10 @@
 section .text
 global _start
 
+EXTERN ejer3
+EXTERN print
+EXTERN exit
+
 _start:
 	
 	pushf
@@ -10,13 +14,14 @@ _start:
 	mov edx, 0
 	mov ebx, array
 							;A: contador de posiciones y longitud (maneja el ciclo externo)
-							;D: el valor más chico y su índice
+							;D: el valor más chico
+							;C: el índice del valor más chico y el contador del loop
 	mov ah, longitud
 
 	.loop:					;i
 	cmp ah, al
 	je .print
-	.findmin				;guarda el minimo en registro c
+	call .findmin			;guarda el minimo en registro c
 
 	.findmin:				;k
 	mov cl, al 				;hay que arrancar desde el i-esimo numero
@@ -31,8 +36,15 @@ _start:
 	.minloop:				;recorrer desde i+1 hasta n los numeros
 	cmp cl, ah
 	je .swapmin				;acá el mínimo esta guardado en dl	
-	inc ebx
+
+	push ebx
+	push ecx
+	mov ch, 0
+	add ebx, ecx
+	pop ecx
 	mov dh, [ebx]			;cargamos el k-esimo valor, estoy pisando el índice del mas chico
+	pop ebx
+
 	cmp dl, dh
 	ja .swap	
 	inc cl
@@ -44,8 +56,23 @@ _start:
 	inc cl
 	jmp .minloop
 
-	.swapmin:
+	.swapmin: 				
+	;falta una condicion para que salga si el minimo ya esta en su lugar
+	;si array[al] == dl -> no hay swap
+
 	mov ebx, array 			;recuperamos el puntero a la posicion original
+	push eax
+	mov ah, 0
+	push ebx
+	add ebx, eax
+	mov dh, [ebx]
+	pop ebx
+	pop eax
+	cmp dh, dl
+	je .noswap
+
+
+	
 
 	push eax				;guardamos en dh el valor array[al]
 	mov ah, 0
@@ -72,11 +99,16 @@ _start:
 	inc al
 	jmp .loop
 
+	.noswap:
+	mov ebx, array
+	inc al
+	jmp .loop
 
 	.print:					
 	mov al, 0
-
+	;dec ah
 	.printloop:
+	mov ebx, array
 	cmp ah, al
 	je .end
 
@@ -98,10 +130,11 @@ _start:
 	.end:
 	popa
 	popf
+	call exit
 
 section .data
 array db 4,3,2,1
-longitud equ $-array-1
+longitud equ $-array
 smallest db "a", 10, 0
 
 section .bss
